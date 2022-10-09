@@ -1,0 +1,1 @@
+DATABASE="<The name of your database to connect to on this service>"
