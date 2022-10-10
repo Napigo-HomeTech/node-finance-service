@@ -1,4 +1,4 @@
-import { createLogger } from './extlib/logger';
+import { createLogger } from './extlib/npg-logger';
 
 const _setupServerEnvironment = () => {
     return Promise.resolve(createLogger());
