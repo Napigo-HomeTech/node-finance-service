@@ -1,9 +1,10 @@
-import { createLogger } from './extlib/npg-logger';
+import { init, logger } from './extlib/@npg-logger';
 
-const _setupServerEnvironment = () => {
-    return Promise.resolve(createLogger());
+const _setupServerEnvironment = async () => {
+    init();
+    logger.info('Logger setup is done');
 };
 
 export const preload = async () => {
-    await _setupServerEnvironment();
+    _setupServerEnvironment();
 };

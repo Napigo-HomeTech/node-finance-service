@@ -1,1 +1,10 @@
+SERVICE_NAME="<The name of this service>"
+
 DATABASE="<The name of your database to connect to on this service>"
+
+MONGO_BASE_URI="<address of the mongodb URI>"
+
+SERVICE_PORT="<The port which this service is listening to>"
+
+LOG_WITH_COLOR="<Flag to use color for winston logger or 'false' if turning off>"
+LOG_LEVEL="<The level of winston log, default to debug when running local docker environment>"

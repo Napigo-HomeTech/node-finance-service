@@ -3,11 +3,12 @@ import koaHelmet from 'koa-helmet';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 import budgetRoutes from './budget-routes';
+import { logger } from '../../extlib/@npg-logger';
 
 const _addRouter = (app: Koa, router: Router) => {
     app.use(router.routes());
     router.stack.forEach((r: Router.Layer) => {
-        console.info(`Added rest route : [${r.methods}] ${r.path}`);
+        logger.http(`Added rest route: [${r.methods}] ${r.path}`);
     });
 };
 
@@ -26,7 +27,7 @@ const init = () => {
     const serviceName = process.env.SERVICE_NAME || 'finance-service';
 
     app.listen(4000).addListener('listening', () => {
-        console.log(`${serviceName} - REST listening on port : ${servicePort}`);
+        logger.info(`${serviceName} - REST listening on port : ${servicePort}`);
     });
 };
 export default {
