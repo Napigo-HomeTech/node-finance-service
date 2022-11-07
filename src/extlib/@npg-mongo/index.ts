@@ -1,26 +1,37 @@
-import { logger } from '../@npg-logger';
-import mongoose from 'mongoose';
+import { MongoClient } from 'mongodb';
+import 'dotenv/config';
 
 /**
- *
+ * The Mongo client container for the entire services
  */
-const init = async () => {
-    const URI = process.env.MONGO_BASE_URI || 'mongodb://localhost:27017';
-    const DATABASE = process.env.DATABASE || 'npg-finance-db';
+var client: MongoClient;
 
+const init = async () => {
+    const URI = process.env.DATABASE_URI || 'mongodb://localhost:27017';
+    const DATABASE = process.env.DATABASE_NAME || 'npg-finance-db';
+
+    client = new MongoClient(URI);
     try {
-        await mongoose.connect(URI, { dbName: DATABASE, serverSelectionTimeoutMS: 3000, socketTimeoutMS: 5000 });
-        logger.info(`Connected successfully to ${DATABASE} database`);
-    } catch (err: any) {
-        throw new Error("Couldn't connect to mongodb, please check if the database is live and online");
+        await client.db(DATABASE).command({ ping: 1 });
+        console.log(`Connected successfully to ${DATABASE} database`);
+    } finally {
+        await client.close();
     }
 };
 
 const teardown = async () => {
-    await mongoose.connection.close();
+    await client.close();
+};
+const getDB = async (): Promise<MongoClient> => {
+    if (client) {
+        return Promise.resolve(client);
+    }
+    await init();
+    return client;
 };
 
 export default {
     init,
-    teardown
+    teardown,
+    getDB
 };

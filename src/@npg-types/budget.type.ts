@@ -8,7 +8,7 @@ type BudgetItem = {
 export interface Budget {
     budget_id: string;
     revision: string;
-    items: Record<string, BudgetItem>;
-    capital_amount: Number;
-    owner: string;
+    items?: Record<string, BudgetItem>;
+    capital_amount?: Number;
+    owner?: string;
 }
