@@ -1,4 +1,3 @@
-import { MongoClient } from 'mongodb';
 import process from 'process';
 import { logger } from './extlib/@npg-logger';
 import dbModule from './extlib/@npg-mongo';
