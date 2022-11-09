@@ -4,11 +4,11 @@ export const AppConfig = {
         port: process.env.SERVICE_PORT ?? ''
     },
     DATABASE: {
-        NAME: process.env.DATABASE_NAME ?? '',
-        DOMAIN: process.env.DATABASE_DOMAIN ?? '',
-        PORT: process.env.DATABASE_PORT ?? '',
-        USER: process.env.DATABASE_USER ?? '',
-        PASSWORD: process.env.DATABASE_PASSWORD ?? ''
+        name: process.env.DATABASE_NAME ?? '',
+        domain: process.env.DATABASE_DOMAIN ?? '',
+        port: process.env.DATABASE_PORT ?? '',
+        user: process.env.DATABASE_USER ?? '',
+        password: process.env.DATABASE_PASSWORD ?? ''
     },
     JWT: {
         issuer: process.env.JWT_ISSUER,

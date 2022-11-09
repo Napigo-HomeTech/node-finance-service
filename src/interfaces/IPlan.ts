@@ -43,3 +43,8 @@ export interface ISummaryPlan {
     status: EnumPlanStatus;
     health_status: EnumHealthStatus;
 }
+
+export interface IPaginatedPlansQuery {
+    limit: number;
+    page: number;
+}

@@ -9,7 +9,7 @@ import { AppConfig } from '../../configs/app-config';
 var client: MongoClient;
 
 const init = async () => {
-    const URI = `mongodb://${AppConfig.DATABASE.USER}:${AppConfig.DATABASE.PASSWORD}@${AppConfig.DATABASE.DOMAIN}:${AppConfig.DATABASE.PORT}?authMechanism=DEFAULT`;
+    const URI = `mongodb://${AppConfig.DATABASE.user}:${AppConfig.DATABASE.password}@${AppConfig.DATABASE.domain}:${AppConfig.DATABASE.port}?authMechanism=DEFAULT`;
     const DATABASE = process.env.DATABASE_NAME || 'npg-account-db';
 
     client = new MongoClient(URI);
