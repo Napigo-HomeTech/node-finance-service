@@ -1,23 +1,22 @@
-import { logger } from './lib/npg-logger';
-import { Server } from './server';
-import Db from './lib/npg-mongo';
-
-export const init = async () => {
-    await Db.init();
-
-    /**
-     * rest http api
-     */
-    const server = new Server();
-    server.run();
-};
-
+import process from 'process';
+import { logger } from './extlib/@npg-logger';
+import dbModule from './extlib/@npg-mongo';
+import rest from './framework/rest';
 /**
  *
- * @param eventType
  */
+export const initServer = async () => {
+    try {
+        await dbModule.init();
+        rest.init();
+    } catch (err: any) {
+        logger.error('Could not start server: Initialization failed.' + err.stack);
+    }
+};
+
 const cleanupResources = (eventType: string) => {
     logger.warn('Cleaning up resources before existing...');
+    dbModule.teardown();
     switch (eventType) {
         case 'uncaughtException':
             process.exit(99);
@@ -26,9 +25,6 @@ const cleanupResources = (eventType: string) => {
     }
 };
 
-/**
- *  handlers for each exiting events
- */
 [`SIGINT`, 'uncaughtException'].forEach((eventType) => {
     process.on(eventType, (e) => {
         cleanupResources(eventType);

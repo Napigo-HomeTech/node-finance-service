@@ -1,4 +1,4 @@
-import { init, logger } from './lib/npg-logger';
+import { init, logger } from './extlib/@npg-logger';
 
 const _setupServerEnvironment = async () => {
     init();
@@ -6,5 +6,5 @@ const _setupServerEnvironment = async () => {
 };
 
 export const preload = async () => {
-    await _setupServerEnvironment();
+    _setupServerEnvironment();
 };

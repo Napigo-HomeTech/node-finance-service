@@ -1,2 +1,2 @@
 export * from './budget.type';
-export * from './plans.type';
+export * from './plans-type';

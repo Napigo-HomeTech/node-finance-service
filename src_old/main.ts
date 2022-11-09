@@ -1,11 +1,11 @@
 import 'dotenv/config';
-import { init } from './initializer';
+import { initServer } from './initializer';
 import { preload } from './preload';
 
 preload()
-    .then(async () => {
-        await init();
+    .then(() => {
+        initServer();
     })
     .catch((err: Error) => {
-        console.error(err);
+        console.log(err);
     });
