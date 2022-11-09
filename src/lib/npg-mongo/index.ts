@@ -20,7 +20,7 @@ const init = async () => {
          * Test out if server can fetch all the available collections in
          * the database, if auth failed, tghis will throw error
          */
-        const collections = await client.db(DATABASE).collections();
+        await client.db(DATABASE).collections();
         logger.info(`Connected successfully to ${DATABASE} database with response : ${JSON.stringify(doc)}`);
     } finally {
         await client.close();
