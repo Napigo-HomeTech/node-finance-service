@@ -1,0 +1,11 @@
+{
+    "code": 200,
+    "data": {
+        "total_count": 2000,
+        "limit": 20,
+        "page": 1,
+        "offset": 0,
+        "results": [{}, {}]
+    },
+    "status": "SUCCESS"
+}

@@ -44,6 +44,11 @@ export interface ISummaryPlan {
     health_status: EnumHealthStatus;
 }
 
+export interface IPaginatedPlanDocument {
+    results: ISummaryPlan[];
+    metadata: [{ _id: any; total_counts: number }];
+}
+
 export interface IPaginatedPlansQuery {
     limit: number;
     page: number;

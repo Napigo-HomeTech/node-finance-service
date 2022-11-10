@@ -1,9 +1,10 @@
-import { MongoClient } from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 import 'dotenv/config';
 
 /**
  * The Mongo client container for the entire services
  */
+var db: Db;
 var client: MongoClient;
 
 const init = async () => {
@@ -11,6 +12,7 @@ const init = async () => {
     const DATABASE = process.env.DATABASE_NAME || 'npg-finance-db';
 
     client = new MongoClient(URI);
+
     try {
         await client.db(DATABASE).command({ ping: 1 });
         console.log(`Connected successfully to ${DATABASE} database`);
@@ -23,7 +25,7 @@ const teardown = async () => {
     await client.close();
 };
 const getDB = async (): Promise<MongoClient> => {
-    if (client) {
+    if (db) {
         return Promise.resolve(client);
     }
     await init();

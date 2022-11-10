@@ -1,4 +1,5 @@
 import Koa from 'koa';
+import cors from '@koa/cors';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 import koaHelmet from 'koa-helmet';
@@ -17,6 +18,7 @@ export class Server implements IPort {
     run() {
         const app = new Koa();
 
+        app.use(cors());
         app.use(bodyParser());
         app.use(koaHelmet());
 

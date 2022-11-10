@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 import 'dotenv/config';
 import { logger } from '../npg-logger';
 import { AppConfig } from '../../configs/app-config';
@@ -7,6 +7,7 @@ import { AppConfig } from '../../configs/app-config';
  * The Mongo client container for the entire services
  */
 var client: MongoClient;
+var db: Db;
 
 const init = async () => {
     const URI = `mongodb://${AppConfig.DATABASE.user}:${AppConfig.DATABASE.password}@${AppConfig.DATABASE.domain}:${AppConfig.DATABASE.port}?authMechanism=DEFAULT`;
@@ -14,15 +15,16 @@ const init = async () => {
 
     client = new MongoClient(URI);
     try {
-        const doc = await client.db(DATABASE).command({ ping: 2 });
-
+        db = client.db(DATABASE);
+        const doc = db.command({ ping: 1 });
         /**
          * Test out if server can fetch all the available collections in
          * the database, if auth failed, tghis will throw error
          */
         await client.db(DATABASE).collections();
         logger.info(`Connected successfully to ${DATABASE} database with response : ${JSON.stringify(doc)}`);
-    } finally {
+    } catch (err: any) {
+        logger.error(err.message);
         await client.close();
     }
 };
@@ -30,12 +32,12 @@ const init = async () => {
 const teardown = async () => {
     await client.close();
 };
-const getDB = async (): Promise<MongoClient> => {
-    if (client) {
-        return Promise.resolve(client);
+
+const getDB = (): Db => {
+    if (db) {
+        return db as Db;
     }
-    await init();
-    return client;
+    throw new Error('DB from mongo client is not yet initialized');
 };
 
 export default {
