@@ -18,7 +18,14 @@ export class Server implements IPort {
     run() {
         const app = new Koa();
 
-        app.use(cors());
+        app.use(
+            cors({
+                /**
+                 * For now, this wwill stay as localhost and specific port used from the UI
+                 * front end */
+                origin: AppConfig.CORS.origin
+            })
+        );
         app.use(bodyParser());
         app.use(koaHelmet());
 

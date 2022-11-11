@@ -20,5 +20,8 @@ export const AppConfig = {
     LOGGING: {
         with_color: process.env.LOG_WITH_COLOR,
         level: process.env.LOG_LEVEL
+    },
+    CORS: {
+        origin: process.env.CORS_ORIGIN ?? ''
     }
 };
