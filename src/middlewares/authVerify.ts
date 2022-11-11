@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash';
 
 /**
  * This middleware extract our the user id value from the token set in
- * Authorization bearer and simple attached to the koa-state object to be pass around
+ * X-CSRF-Token request header and simple attached to the koa-state object to be pass around
  * the controller and services whoever need it.
  * @param ctx
  * @param next
@@ -19,12 +19,11 @@ export const authVerify = async (ctx: RouterContext, next: Next) => {
          * Check if Bearer is found on the auth header value, instead of of a token without the
          * bearer prefix..
          */
-        const authHeaderValue = ctx.header.authorization;
-        if (!authHeaderValue?.includes('Bearer')) {
-            throw new Error('Bearer token is missing');
-        }
 
-        const token = authHeaderValue.split('Bearer')[1].trim();
+        if (!ctx.headers.hasOwnProperty('x-csrf-token')) {
+            throw new Error('csrftoken header not found');
+        }
+        const token = ctx.headers['x-csrf-token'] as string;
 
         const verified = jwt.verify(token, AppConfig.JWT.secret, {
             complete: true,
