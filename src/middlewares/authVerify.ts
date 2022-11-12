@@ -19,7 +19,6 @@ export const authVerify = async (ctx: RouterContext, next: Next) => {
          * Check if Bearer is found on the auth header value, instead of of a token without the
          * bearer prefix..
          */
-
         if (!ctx.headers.hasOwnProperty('x-csrf-token')) {
             throw new Error('csrftoken header not found');
         }

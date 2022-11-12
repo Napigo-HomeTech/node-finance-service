@@ -1,5 +1,8 @@
 import { transformPaginatedBasedHTTPResponse } from '../transformers/httpresponse.transformers';
-import { queryPaginatedUserPlans } from '../repository/plan.repository';
+import { insertPlan, queryPaginatedUserPlans } from '../repository/plan.repository';
+import { EnumPlanStatus, IDocPlan } from '../interfaces/IPlan';
+import { ObjectId } from 'mongodb';
+import moment from 'moment';
 
 /**
  *
@@ -17,4 +20,29 @@ const getPaginatedUserPlans = async (userId: string, page: number, limit: number
     return result;
 };
 
-export { getPaginatedUserPlans };
+/**
+ *
+ * @param userId
+ */
+const createPlan = async (userId: string) => {
+    const planDoc: IDocPlan = {
+        _id: new ObjectId(),
+        owner_id: userId,
+        title: 'untitled',
+        net_income: 0,
+        esm_percent: 0,
+        esm_amount: 0,
+        asm_percent: 0,
+        asm_amount: 0,
+        col: 0,
+        created_at: moment().format('DD MM YYYY - HH:mm:SS a').toString(),
+        updated_at: null,
+        deleted: 0,
+        status: EnumPlanStatus.draft,
+        active_on: null,
+        health_status: null
+    };
+
+    return await insertPlan(planDoc);
+};
+export { getPaginatedUserPlans, createPlan };

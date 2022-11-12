@@ -28,7 +28,7 @@ export interface IDocPlan {
     deleted: 0 | 1;
     status: EnumPlanStatus;
     active_on: null | string;
-    health_status: EnumHealthStatus;
+    health_status: EnumHealthStatus | null;
 }
 
 export interface ISummaryPlan {

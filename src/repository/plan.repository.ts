@@ -1,4 +1,4 @@
-import { IPaginatedPlanDocument, ISummaryPlan } from '../interfaces/IPlan';
+import { IDocPlan, IPaginatedPlanDocument, ISummaryPlan } from '../interfaces/IPlan';
 import mongo from '../lib/npg-mongo';
 
 /**
@@ -12,7 +12,6 @@ const COLLECTION_NAME = 'plans';
  */
 const queryPaginatedUserPlans = async (userId: string, offset: number, limit: number): Promise<IPaginatedPlanDocument> => {
     const DB = mongo.getDB();
-
     const collection = DB.collection(COLLECTION_NAME);
 
     const cursor = collection.aggregate([
@@ -63,4 +62,16 @@ const queryPaginatedUserPlans = async (userId: string, offset: number, limit: nu
     return results[0] as IPaginatedPlanDocument;
 };
 
-export { queryPaginatedUserPlans };
+const insertPlan = async (plan: IDocPlan): Promise<string> => {
+    const db = mongo.getDB();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const result = await collection.insertOne(plan);
+
+    if (result.acknowledged) {
+        return result.insertedId.toString();
+    }
+    throw new Error('Plan failed to insert');
+};
+
+export { queryPaginatedUserPlans, insertPlan };

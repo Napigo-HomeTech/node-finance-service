@@ -6,8 +6,8 @@ import { RouterContext } from 'koa-router';
  * @param payload
  * @param headers
  */
-export const sendGETResponse = (ctx: RouterContext, payload: any, headers: any = {}) => {
-    ctx.status = 200;
+export const sendResponse = (ctx: RouterContext, status: number, payload: any, headers: any = {}) => {
+    ctx.status = status;
     ctx.set(headers);
     ctx.body = payload;
 };
