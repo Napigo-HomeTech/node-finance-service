@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { IDocPlan, IPaginatedPlanDocument, ISummaryPlan } from '../interfaces/IPlan';
 import mongo from '../lib/npg-mongo';
 
@@ -62,6 +63,19 @@ const queryPaginatedUserPlans = async (userId: string, offset: number, limit: nu
     return results[0] as IPaginatedPlanDocument;
 };
 
+/**
+ *
+ * @param plan_id
+ */
+const findPlan = async (plan_id: string): Promise<IDocPlan> => {
+    const _id = new ObjectId(plan_id);
+    const db = mongo.getDB();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const result = await collection.findOne({ _id });
+    return result as IDocPlan;
+};
+
 const insertPlan = async (plan: IDocPlan): Promise<string> => {
     const db = mongo.getDB();
     const collection = db.collection(COLLECTION_NAME);
@@ -74,4 +88,23 @@ const insertPlan = async (plan: IDocPlan): Promise<string> => {
     throw new Error('Plan failed to insert');
 };
 
-export { queryPaginatedUserPlans, insertPlan };
+const findOneAndUpdatePlan = async (id: string, keyName: string, value: string): Promise<string> => {
+    const _id = new ObjectId(id);
+    const db = mongo.getDB();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const result = await collection.findOneAndUpdate(
+        { _id },
+        {
+            $set: {
+                title: value
+            }
+        }
+    );
+    if (result.ok === 0) {
+        throw new Error(`Failed to update Title for the plan, ${id}`);
+    }
+    return result.value?._id.toString() as string;
+};
+
+export { queryPaginatedUserPlans, insertPlan, findPlan, findOneAndUpdatePlan };

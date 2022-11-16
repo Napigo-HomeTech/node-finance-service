@@ -1,6 +1,6 @@
 import { RouterContext } from 'koa-router';
 import { httpError, HTTP_STATUS } from '../lib/npg-errors';
-import { IPaginatedPlansQuery } from '../interfaces/IPlan';
+import { IDocPlan, IPaginatedPlansQuery, IPlanTitleUpdateRequest } from '../interfaces/IPlan';
 import { logger } from '../lib/npg-logger';
 import * as planServices from '../services/plan.service';
 import { sendResponse } from '../helpers/http-response.helper';
@@ -41,4 +41,40 @@ const createPlanController = async (ctx: RouterContext) => {
     }
 };
 
-export { getPlansController, createPlanController };
+/**
+ *
+ * @param ctx
+ */
+const getPlanController = async (ctx: RouterContext) => {
+    const { plan_id } = ctx.params;
+    try {
+        const plan = await planServices.getPlan(plan_id);
+        const respPayload: IHTTPBaseResponse<IDocPlan> = {
+            code: 200,
+            data: plan,
+            status: 'SUCCESS'
+        };
+        sendResponse(ctx, HTTP_STATUS.StatusOK, respPayload);
+    } catch (err: any) {
+        logger.error(err.message);
+        httpError(ctx, HTTP_STATUS.StatusBadRequest, 'Could not retrieved plan with id : ' + plan_id);
+    }
+};
+
+const updatePlanTitleController = async (ctx: RouterContext) => {
+    const { plan_id, title } = ctx.state.body as IPlanTitleUpdateRequest;
+    try {
+        const result = await planServices.updatePlanTitle(plan_id, title);
+        const respPayload: IHTTPBaseResponse<{ _id: string }> = {
+            code: 200,
+            data: { _id: result },
+            status: 'SUCCESS'
+        };
+        sendResponse(ctx, HTTP_STATUS.StatusOK, respPayload);
+    } catch (err: any) {
+        logger.error(err.message);
+        httpError(ctx, HTTP_STATUS.StatusBadRequest, 'Could update title plan : ' + plan_id);
+    }
+};
+
+export { getPlansController, createPlanController, getPlanController, updatePlanTitleController };

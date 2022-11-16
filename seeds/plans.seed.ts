@@ -19,12 +19,13 @@ export const seedPlans = async (count: number) => {
             asm_percent: _getPercentage(20, 100),
             asm_amount: Number.parseFloat(faker.finance.amount(1000, 10000)),
             col: Number.parseFloat(faker.finance.amount(1000, 10000)),
-            created_at: faker.date.future().toDateString(),
+            created_at: faker.date.future().toISOString(),
             updated_at: null,
             deleted: 0,
             status: EnumPlanStatus.draft,
             active_on: null,
-            health_status: EnumHealthStatus.healthy
+            health_status: EnumHealthStatus.healthy,
+            items: []
         }));
 
     return plans;

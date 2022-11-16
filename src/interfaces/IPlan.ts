@@ -29,6 +29,13 @@ export interface IDocPlan {
     status: EnumPlanStatus;
     active_on: null | string;
     health_status: EnumHealthStatus | null;
+    items: PlanItem[];
+}
+
+export interface PlanItem {
+    name: string;
+    category: string;
+    amount: number;
 }
 
 export interface ISummaryPlan {
@@ -52,4 +59,9 @@ export interface IPaginatedPlanDocument {
 export interface IPaginatedPlansQuery {
     limit: number;
     page: number;
+}
+
+export interface IPlanTitleUpdateRequest {
+    plan_id: string;
+    title: string;
 }
