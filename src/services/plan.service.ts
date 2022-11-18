@@ -1,5 +1,5 @@
 import { transformPaginatedBasedHTTPResponse } from '../transformers/httpresponse.transformers';
-import { findOneAndUpdatePlan, findPlan, insertPlan, queryPaginatedUserPlans } from '../repository/plan.repository';
+import { findOneAndUpdatePlan, findPlan, insertPlan, queryPaginatedUserPlans, deletePlanById } from '../repository/plan.repository';
 import { EnumPlanStatus, IDocPlan } from '../interfaces/IPlan';
 import { ObjectId } from 'mongodb';
 import moment from 'moment';
@@ -59,4 +59,12 @@ const updatePlanTitle = async (plan_id: string, title: string) => {
     return await findOneAndUpdatePlan(plan_id, 'title', title);
 };
 
-export { getPaginatedUserPlans, createPlan, getPlan, updatePlanTitle };
+const deletePlan = async (plan_id: string) => {
+    return await deletePlanById(plan_id);
+};
+
+const softDeletePlan = async (plan_id: string) => {
+    return await findOneAndUpdatePlan(plan_id, 'deleted', 1);
+};
+
+export { getPaginatedUserPlans, createPlan, getPlan, updatePlanTitle, deletePlan, softDeletePlan };

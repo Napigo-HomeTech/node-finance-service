@@ -21,7 +21,8 @@ const queryPaginatedUserPlans = async (userId: string, offset: number, limit: nu
                 results: [
                     {
                         $match: {
-                            owner_id: userId
+                            owner_id: userId,
+                            deleted: 0
                         }
                     },
                     {
@@ -72,10 +73,15 @@ const findPlan = async (plan_id: string): Promise<IDocPlan> => {
     const db = mongo.getDB();
     const collection = db.collection(COLLECTION_NAME);
 
-    const result = await collection.findOne({ _id });
+    const result = await collection.findOne({ _id, deleted: 0 });
     return result as IDocPlan;
 };
 
+/**
+ *
+ * @param plan
+ * @returns
+ */
 const insertPlan = async (plan: IDocPlan): Promise<string> => {
     const db = mongo.getDB();
     const collection = db.collection(COLLECTION_NAME);
@@ -88,23 +94,47 @@ const insertPlan = async (plan: IDocPlan): Promise<string> => {
     throw new Error('Plan failed to insert');
 };
 
-const findOneAndUpdatePlan = async (id: string, keyName: string, value: string): Promise<string> => {
+/**
+ *
+ * @param id
+ * @param keyName
+ * @param value
+ * @returns
+ */
+const findOneAndUpdatePlan = async (id: string, keyName: string, value: string | number | any): Promise<string> => {
     const _id = new ObjectId(id);
     const db = mongo.getDB();
     const collection = db.collection(COLLECTION_NAME);
 
     const result = await collection.findOneAndUpdate(
-        { _id },
+        { _id, deleted: 0 },
         {
             $set: {
-                title: value
+                [keyName]: value
             }
         }
     );
-    if (result.ok === 0) {
+    if (result.ok === 0 || result.value === null) {
         throw new Error(`Failed to update Title for the plan, ${id}`);
     }
     return result.value?._id.toString() as string;
 };
 
-export { queryPaginatedUserPlans, insertPlan, findPlan, findOneAndUpdatePlan };
+/**
+ *
+ * @param id
+ */
+const deletePlanById = async (id: string): Promise<string> => {
+    const _id = new ObjectId(id);
+    const db = mongo.getDB();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const result = await collection.findOneAndDelete({ _id });
+    if (result.ok === 0 || result.value === null) {
+        throw new Error(`Failed to delete plan by id of : ${id}`);
+    }
+
+    return result.value?._id.toString() as string;
+};
+
+export { queryPaginatedUserPlans, insertPlan, findPlan, findOneAndUpdatePlan, deletePlanById };

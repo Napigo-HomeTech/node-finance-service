@@ -61,6 +61,10 @@ const getPlanController = async (ctx: RouterContext) => {
     }
 };
 
+/**
+ *
+ * @param ctx
+ */
 const updatePlanTitleController = async (ctx: RouterContext) => {
     const { plan_id, title } = ctx.state.body as IPlanTitleUpdateRequest;
     try {
@@ -77,4 +81,25 @@ const updatePlanTitleController = async (ctx: RouterContext) => {
     }
 };
 
-export { getPlansController, createPlanController, getPlanController, updatePlanTitleController };
+/**
+ *
+ * @param ctx
+ */
+const deletePlanController = async (ctx: RouterContext) => {
+    const { plan_id } = ctx.params;
+    try {
+        const result = await planServices.softDeletePlan(plan_id);
+
+        const respPayload: IHTTPBaseResponse<{ _id: string }> = {
+            code: 200,
+            data: { _id: result },
+            status: 'DELETED'
+        };
+        sendResponse(ctx, HTTP_STATUS.StatusOK, respPayload);
+    } catch (err: any) {
+        logger.error(err.message);
+        httpError(ctx, HTTP_STATUS.StatusBadRequest, 'Could not delete plan with id : ' + plan_id);
+    }
+};
+
+export { getPlansController, createPlanController, getPlanController, updatePlanTitleController, deletePlanController };
