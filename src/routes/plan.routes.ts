@@ -6,7 +6,8 @@ import {
     getPlansController,
     updatePlanTitleController,
     deletePlanController,
-    updatePlanDatafieldController
+    updatePlanDatafieldController,
+    updatePlanFormController
 } from '../controllers/plan.controller';
 import { validateBody } from '../validators/postbody.validator';
 
@@ -15,7 +16,14 @@ const router = new Router({ prefix: '/plans' });
 router.get('/', validateQueries('get-paginated-plans'), getPlansController);
 router.get('/:plan_id', getPlanController);
 router.post('/', createPlanController);
+router.put('/', validateBody('put-planform'), updatePlanFormController);
+/**
+ * @deprecated
+ */
 router.put('/title', validateBody('put-plan-title'), updatePlanTitleController);
+/**
+ * @deprecated
+ */
 router.put('/datafield', validateBody('put-plan-datafield'), updatePlanDatafieldController);
 router.delete('/:plan_id', deletePlanController);
 

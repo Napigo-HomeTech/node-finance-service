@@ -8,11 +8,18 @@ import { httpError, HTTP_STATUS } from '../lib/npg-errors';
  * Validator for PUT /plans/title
  * ---------------------------------------------------------------------------
  */
+
+/**
+ * @deprecated
+ */
 const validatePutPlanTitleBody_schema = yup.object().shape({
     plan_id: yup.string().required(),
     title: yup.string().required()
 });
 
+/**
+ * @deprecated
+ */
 const validatePlanDatafieldBody_schema = yup.object().shape({
     plan_id: yup.string().required(),
     datafield_name: yup.string().required(),
@@ -29,9 +36,25 @@ const validatePlanDatafieldBody_schema = yup.object().shape({
     })
 });
 
+/**
+ *
+ */
+const validatePutPlanBody_schema = yup.object().shape({
+    _id: yup.string().required(),
+    title: yup.string().required(),
+    net_income: yup.string().required(),
+    esm_percent: yup.number().required(),
+    esm_amount: yup.string().required(),
+    asm_percent: yup.number().required(),
+    asm_amount: yup.string().required(),
+    col: yup.string().required(),
+    items: yup.array(yup.object()).required()
+});
+
 const BodySchemaValidatorMap = {
     'put-plan-title': validatePutPlanTitleBody_schema,
-    'put-plan-datafield': validatePlanDatafieldBody_schema
+    'put-plan-datafield': validatePlanDatafieldBody_schema,
+    'put-planform': validatePutPlanBody_schema
 };
 
 export const validateBody = (name: keyof typeof BodySchemaValidatorMap) => {

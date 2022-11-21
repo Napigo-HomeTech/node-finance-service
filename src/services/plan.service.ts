@@ -1,6 +1,13 @@
 import { transformPaginatedBasedHTTPResponse } from '../transformers/httpresponse.transformers';
-import { findOneAndUpdatePlan, findPlan, insertPlan, queryPaginatedUserPlans, deletePlanById } from '../repository/plan.repository';
-import { EnumPlanStatus, IDocPlan, IPlanDateFieldUpdateRequest } from '../interfaces/IPlan';
+import {
+    findOneAndUpdatePlan,
+    findPlan,
+    insertPlan,
+    queryPaginatedUserPlans,
+    deletePlanById,
+    findPlanAndUpdate
+} from '../repository/plan.repository';
+import { EnumPlanStatus, IDocPlan, IPlanDateFieldUpdateRequest, IPlanFormUpdateRequest } from '../interfaces/IPlan';
 import { ObjectId } from 'mongodb';
 import moment from 'moment';
 
@@ -57,6 +64,15 @@ const getPlan = async (plan_id: string) => {
 
 /**
  *
+ * @param payload
+ */
+const updatePlan = async (payload: IPlanFormUpdateRequest) => {
+    payload.updated_at = moment().toISOString();
+    return await findPlanAndUpdate(payload._id?.toString() as string, payload);
+};
+
+/**
+ * @deprecated
  * @param plan_id
  * @param title
  * @returns
@@ -67,6 +83,7 @@ const updatePlanTitle = async (plan_id: string, title: string) => {
 
 /**
  *
+ * @deprecated
  * @param payload
  */
 const updatePlanDataField = async (payload: IPlanDateFieldUpdateRequest) => {
@@ -102,4 +119,4 @@ const softDeletePlan = async (plan_id: string) => {
     return await findOneAndUpdatePlan(plan_id, 'deleted', 1);
 };
 
-export { getPaginatedUserPlans, createPlan, getPlan, updatePlanTitle, deletePlan, softDeletePlan, updatePlanDataField };
+export { getPaginatedUserPlans, createPlan, getPlan, updatePlan, updatePlanTitle, deletePlan, softDeletePlan, updatePlanDataField };

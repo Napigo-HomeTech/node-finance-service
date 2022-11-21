@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { IDocPlan, IPaginatedPlanDocument, ISummaryPlan } from '../interfaces/IPlan';
+import { IDocPlan, IPaginatedPlanDocument, IPlanFormUpdateRequest, ISummaryPlan } from '../interfaces/IPlan';
 import mongo from '../lib/npg-mongo';
 
 /**
@@ -94,8 +94,29 @@ const insertPlan = async (plan: IDocPlan): Promise<string> => {
     throw new Error('Plan failed to insert');
 };
 
+const findPlanAndUpdate = async (id: string, payload: IPlanFormUpdateRequest) => {
+    const _id = new ObjectId(id);
+    const db = mongo.getDB();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const objEntity = payload;
+    delete objEntity._id;
+
+    console.info(objEntity);
+    const result = await collection.findOneAndUpdate(
+        { _id, deleted: 0 },
+        {
+            $set: objEntity
+        }
+    );
+    if (result.ok === 0 || result.value === null) {
+        throw new Error(`Failed to update Title for the plan, ${id}`);
+    }
+    return result.value?._id.toString() as string;
+};
 /**
  *
+ * @deprecated
  * @param id
  * @param keyName
  * @param value
@@ -137,4 +158,4 @@ const deletePlanById = async (id: string): Promise<string> => {
     return result.value?._id.toString() as string;
 };
 
-export { queryPaginatedUserPlans, insertPlan, findPlan, findOneAndUpdatePlan, deletePlanById };
+export { queryPaginatedUserPlans, insertPlan, findPlan, findPlanAndUpdate, findOneAndUpdatePlan, deletePlanById };

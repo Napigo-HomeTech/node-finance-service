@@ -1,6 +1,6 @@
 import { RouterContext } from 'koa-router';
 import { httpError, HTTP_STATUS } from '../lib/npg-errors';
-import { IDocPlan, IPaginatedPlansQuery, IPlanDateFieldUpdateRequest, IPlanTitleUpdateRequest } from '../interfaces/IPlan';
+import { IDocPlan, IPaginatedPlansQuery, IPlanDateFieldUpdateRequest, IPlanFormUpdateRequest, IPlanTitleUpdateRequest } from '../interfaces/IPlan';
 import { logger } from '../lib/npg-logger';
 import * as planServices from '../services/plan.service';
 import { sendResponse } from '../helpers/http-response.helper';
@@ -65,6 +65,29 @@ const getPlanController = async (ctx: RouterContext) => {
  *
  * @param ctx
  */
+const updatePlanFormController = async (ctx: RouterContext) => {
+    const payload = ctx.state.body as IPlanFormUpdateRequest;
+    try {
+        /**
+         * @TODO
+         */
+        const result = await planServices.updatePlan(payload);
+        const respPayload: IHTTPBaseResponse<{ _id: string }> = {
+            code: 200,
+            data: { _id: result },
+            status: 'SUCCESS'
+        };
+        sendResponse(ctx, HTTP_STATUS.StatusOK, respPayload);
+    } catch (err: any) {
+        logger.error(err.message);
+        httpError(ctx, HTTP_STATUS.StatusBadRequest, 'Could not update plan with id : ' + payload._id);
+    }
+};
+
+/**
+ * @deprecated
+ * @param ctx
+ */
 const updatePlanTitleController = async (ctx: RouterContext) => {
     const { plan_id, title } = ctx.state.body as IPlanTitleUpdateRequest;
     try {
@@ -82,7 +105,7 @@ const updatePlanTitleController = async (ctx: RouterContext) => {
 };
 
 /**
- *
+ * @deprecated
  * @param ctx
  */
 const updatePlanDatafieldController = async (ctx: RouterContext) => {
@@ -126,6 +149,7 @@ export {
     getPlansController,
     createPlanController,
     getPlanController,
+    updatePlanFormController,
     updatePlanTitleController,
     deletePlanController,
     updatePlanDatafieldController
