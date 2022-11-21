@@ -10,6 +10,7 @@ import {
 import { EnumPlanStatus, IDocPlan, IPlanDateFieldUpdateRequest, IPlanFormUpdateRequest } from '../interfaces/IPlan';
 import { ObjectId } from 'mongodb';
 import moment from 'moment';
+import { defaultCategories } from '../helpers/default-categories';
 
 /**
  *
@@ -48,6 +49,7 @@ const createPlan = async (userId: string) => {
         status: EnumPlanStatus.draft,
         active_on: null,
         health_status: null,
+        categories: defaultCategories,
         items: []
     };
 

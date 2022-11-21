@@ -25,6 +25,7 @@ export const seedPlans = async (count: number) => {
             status: EnumPlanStatus.draft,
             active_on: null,
             health_status: EnumHealthStatus.healthy,
+            categories: [],
             items: []
         }));
 
