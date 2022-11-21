@@ -13,8 +13,25 @@ const validatePutPlanTitleBody_schema = yup.object().shape({
     title: yup.string().required()
 });
 
+const validatePlanDatafieldBody_schema = yup.object().shape({
+    plan_id: yup.string().required(),
+    datafield_name: yup.string().required(),
+    datafield_type: yup.string().required(),
+    datafield_value: yup.lazy((value) => {
+        switch (typeof value) {
+            case 'object':
+                return yup.object<any>().required('Required field').typeError('Required field');
+            case 'number':
+                return yup.number().required();
+            default:
+                return yup.string().required();
+        }
+    })
+});
+
 const BodySchemaValidatorMap = {
-    'put-plan-title': validatePutPlanTitleBody_schema
+    'put-plan-title': validatePutPlanTitleBody_schema,
+    'put-plan-datafield': validatePlanDatafieldBody_schema
 };
 
 export const validateBody = (name: keyof typeof BodySchemaValidatorMap) => {

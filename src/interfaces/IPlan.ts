@@ -17,12 +17,12 @@ export interface IDocPlan {
     _id?: ObjectId;
     owner_id: string;
     title: string;
-    net_income: number;
+    net_income: string;
     esm_percent: number;
-    esm_amount: number;
+    esm_amount: string;
     asm_percent: number;
-    asm_amount: number;
-    col: number;
+    asm_amount: string;
+    col: string;
     created_at: string;
     updated_at: null | string;
     deleted: 0 | 1;
@@ -38,18 +38,13 @@ export interface PlanItem {
     amount: number;
 }
 
-export interface ISummaryPlan {
-    _id: ObjectId;
-    title: string;
-    col: number;
-    net_income: number;
-    asm_percent: number;
-    asm_amount: number;
-    created_at: string;
-    updated_at: null | string;
-    status: EnumPlanStatus;
-    health_status: EnumHealthStatus;
-}
+/**
+ * Simplify version of ISummaryPlan interface
+ */
+export type ISummaryPlan = Pick<
+    IDocPlan,
+    '_id' | 'title' | 'col' | 'net_income' | 'asm_percent' | 'asm_amount' | 'created_at' | 'updated_at' | 'status' | 'health_status'
+>;
 
 export interface IPaginatedPlanDocument {
     results: ISummaryPlan[];
@@ -64,4 +59,11 @@ export interface IPaginatedPlansQuery {
 export interface IPlanTitleUpdateRequest {
     plan_id: string;
     title: string;
+}
+
+export interface IPlanDateFieldUpdateRequest {
+    plan_id: string;
+    datafield_name: string;
+    datafield_type: string;
+    datafield_value: any;
 }

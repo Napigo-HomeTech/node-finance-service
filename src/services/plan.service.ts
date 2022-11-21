@@ -1,6 +1,6 @@
 import { transformPaginatedBasedHTTPResponse } from '../transformers/httpresponse.transformers';
 import { findOneAndUpdatePlan, findPlan, insertPlan, queryPaginatedUserPlans, deletePlanById } from '../repository/plan.repository';
-import { EnumPlanStatus, IDocPlan } from '../interfaces/IPlan';
+import { EnumPlanStatus, IDocPlan, IPlanDateFieldUpdateRequest } from '../interfaces/IPlan';
 import { ObjectId } from 'mongodb';
 import moment from 'moment';
 
@@ -29,12 +29,12 @@ const createPlan = async (userId: string) => {
         _id: new ObjectId(),
         owner_id: userId,
         title: 'untitled',
-        net_income: 0,
+        net_income: '0.00',
         esm_percent: 0,
-        esm_amount: 0,
+        esm_amount: '0.00',
         asm_percent: 0,
-        asm_amount: 0,
-        col: 0,
+        asm_amount: '0.00',
+        col: '0.00',
         created_at: moment().toISOString(),
         updated_at: null,
         deleted: 0,
@@ -55,8 +55,43 @@ const getPlan = async (plan_id: string) => {
     return await findPlan(plan_id);
 };
 
+/**
+ *
+ * @param plan_id
+ * @param title
+ * @returns
+ */
 const updatePlanTitle = async (plan_id: string, title: string) => {
     return await findOneAndUpdatePlan(plan_id, 'title', title);
+};
+
+/**
+ *
+ * @param payload
+ */
+const updatePlanDataField = async (payload: IPlanDateFieldUpdateRequest) => {
+    const { plan_id, datafield_name, datafield_type, datafield_value } = payload;
+
+    /**
+     * @Step1
+     *
+     */
+
+    let value;
+
+    switch (datafield_type) {
+        case 'string':
+            value = datafield_value as string;
+            break;
+        case 'number':
+            value = datafield_value as number;
+            break;
+        case 'array':
+            value = datafield_value as Array<any>;
+        default:
+            value = datafield_value as object;
+    }
+    return await findOneAndUpdatePlan(plan_id, datafield_name, value);
 };
 
 const deletePlan = async (plan_id: string) => {
@@ -67,4 +102,4 @@ const softDeletePlan = async (plan_id: string) => {
     return await findOneAndUpdatePlan(plan_id, 'deleted', 1);
 };
 
-export { getPaginatedUserPlans, createPlan, getPlan, updatePlanTitle, deletePlan, softDeletePlan };
+export { getPaginatedUserPlans, createPlan, getPlan, updatePlanTitle, deletePlan, softDeletePlan, updatePlanDataField };
