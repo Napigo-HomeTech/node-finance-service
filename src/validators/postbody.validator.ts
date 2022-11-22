@@ -15,7 +15,7 @@ const validatePutPlanBody_schema = yup.object().shape({
     asm_percent: yup.number().required(),
     asm_amount: yup.string().required(),
     col: yup.string().required(),
-    categories: yup.array(yup.string()).required(),
+    categories: yup.array(yup.object()).required(),
     items: yup.array(yup.object()).required()
 });
 

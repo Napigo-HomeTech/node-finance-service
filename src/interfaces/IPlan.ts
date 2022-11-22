@@ -29,9 +29,14 @@ export interface IDocPlan {
     status: EnumPlanStatus;
     active_on: null | string;
     health_status: EnumHealthStatus | null;
-    categories: string[];
+    categories: Category[];
     items: PlanItem[];
 }
+
+export type Category = {
+    name: string;
+    colorHex: string;
+};
 
 export interface PlanItem {
     name: string;
