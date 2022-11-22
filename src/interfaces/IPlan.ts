@@ -61,20 +61,3 @@ export type IPlanFormUpdateRequest = Pick<
     IDocPlan,
     '_id' | 'title' | 'net_income' | 'esm_percent' | 'esm_amount' | 'asm_percent' | 'asm_amount' | 'col' | 'items' | 'updated_at'
 >;
-
-/**
- * @deprecated
- */
-export interface IPlanTitleUpdateRequest {
-    plan_id: string;
-    title: string;
-}
-/**
- * @deprecated
- */
-export interface IPlanDateFieldUpdateRequest {
-    plan_id: string;
-    datafield_name: string;
-    datafield_type: string;
-    datafield_value: any;
-}

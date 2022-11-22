@@ -114,10 +114,7 @@ const findPlanAndUpdate = async (id: string, payload: IPlanFormUpdateRequest) =>
     }
     return result.value?._id.toString() as string;
 };
-/**
- *
- * @deprecated
- * @param id
+/*
  * @param keyName
  * @param value
  * @returns
@@ -158,4 +155,4 @@ const deletePlanById = async (id: string): Promise<string> => {
     return result.value?._id.toString() as string;
 };
 
-export { queryPaginatedUserPlans, insertPlan, findPlan, findPlanAndUpdate, findOneAndUpdatePlan, deletePlanById };
+export { queryPaginatedUserPlans, insertPlan, findPlan, findPlanAndUpdate, deletePlanById, findOneAndUpdatePlan };

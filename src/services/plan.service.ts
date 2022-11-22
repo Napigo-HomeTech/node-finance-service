@@ -7,7 +7,7 @@ import {
     deletePlanById,
     findPlanAndUpdate
 } from '../repository/plan.repository';
-import { EnumPlanStatus, IDocPlan, IPlanDateFieldUpdateRequest, IPlanFormUpdateRequest } from '../interfaces/IPlan';
+import { EnumPlanStatus, IDocPlan, IPlanFormUpdateRequest } from '../interfaces/IPlan';
 import { ObjectId } from 'mongodb';
 import moment from 'moment';
 import { defaultCategories } from '../helpers/default-categories';
@@ -73,46 +73,6 @@ const updatePlan = async (payload: IPlanFormUpdateRequest) => {
     return await findPlanAndUpdate(payload._id?.toString() as string, payload);
 };
 
-/**
- * @deprecated
- * @param plan_id
- * @param title
- * @returns
- */
-const updatePlanTitle = async (plan_id: string, title: string) => {
-    return await findOneAndUpdatePlan(plan_id, 'title', title);
-};
-
-/**
- *
- * @deprecated
- * @param payload
- */
-const updatePlanDataField = async (payload: IPlanDateFieldUpdateRequest) => {
-    const { plan_id, datafield_name, datafield_type, datafield_value } = payload;
-
-    /**
-     * @Step1
-     *
-     */
-
-    let value;
-
-    switch (datafield_type) {
-        case 'string':
-            value = datafield_value as string;
-            break;
-        case 'number':
-            value = datafield_value as number;
-            break;
-        case 'array':
-            value = datafield_value as Array<any>;
-        default:
-            value = datafield_value as object;
-    }
-    return await findOneAndUpdatePlan(plan_id, datafield_name, value);
-};
-
 const deletePlan = async (plan_id: string) => {
     return await deletePlanById(plan_id);
 };
@@ -121,4 +81,4 @@ const softDeletePlan = async (plan_id: string) => {
     return await findOneAndUpdatePlan(plan_id, 'deleted', 1);
 };
 
-export { getPaginatedUserPlans, createPlan, getPlan, updatePlan, updatePlanTitle, deletePlan, softDeletePlan, updatePlanDataField };
+export { getPaginatedUserPlans, createPlan, getPlan, updatePlan, deletePlan, softDeletePlan };

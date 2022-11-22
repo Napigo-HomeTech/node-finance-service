@@ -1,6 +1,6 @@
 import { RouterContext } from 'koa-router';
 import { httpError, HTTP_STATUS } from '../lib/npg-errors';
-import { IDocPlan, IPaginatedPlansQuery, IPlanDateFieldUpdateRequest, IPlanFormUpdateRequest, IPlanTitleUpdateRequest } from '../interfaces/IPlan';
+import { IDocPlan, IPaginatedPlansQuery, IPlanFormUpdateRequest } from '../interfaces/IPlan';
 import { logger } from '../lib/npg-logger';
 import * as planServices from '../services/plan.service';
 import { sendResponse } from '../helpers/http-response.helper';
@@ -85,46 +85,6 @@ const updatePlanFormController = async (ctx: RouterContext) => {
 };
 
 /**
- * @deprecated
- * @param ctx
- */
-const updatePlanTitleController = async (ctx: RouterContext) => {
-    const { plan_id, title } = ctx.state.body as IPlanTitleUpdateRequest;
-    try {
-        const result = await planServices.updatePlanTitle(plan_id, title);
-        const respPayload: IHTTPBaseResponse<{ _id: string }> = {
-            code: 200,
-            data: { _id: result },
-            status: 'SUCCESS'
-        };
-        sendResponse(ctx, HTTP_STATUS.StatusOK, respPayload);
-    } catch (err: any) {
-        logger.error(err.message);
-        httpError(ctx, HTTP_STATUS.StatusBadRequest, 'Could update title plan : ' + plan_id);
-    }
-};
-
-/**
- * @deprecated
- * @param ctx
- */
-const updatePlanDatafieldController = async (ctx: RouterContext) => {
-    const payload = ctx.state.body as IPlanDateFieldUpdateRequest;
-    try {
-        const result = await planServices.updatePlanDataField(payload);
-        const respPayload: IHTTPBaseResponse<{ _id: string }> = {
-            code: 200,
-            data: { _id: result },
-            status: 'SUCCESS'
-        };
-        sendResponse(ctx, HTTP_STATUS.StatusOK, respPayload);
-    } catch (err: any) {
-        logger.error(err.message);
-        httpError(ctx, HTTP_STATUS.StatusBadRequest, 'Could update plan datafield of : ' + payload.datafield_name);
-    }
-};
-
-/**
  *
  * @param ctx
  */
@@ -145,12 +105,4 @@ const deletePlanController = async (ctx: RouterContext) => {
     }
 };
 
-export {
-    getPlansController,
-    createPlanController,
-    getPlanController,
-    updatePlanFormController,
-    updatePlanTitleController,
-    deletePlanController,
-    updatePlanDatafieldController
-};
+export { getPlansController, createPlanController, getPlanController, updatePlanFormController, deletePlanController };

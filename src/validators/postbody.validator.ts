@@ -4,39 +4,6 @@ import { RouterContext } from 'koa-router';
 import { httpError, HTTP_STATUS } from '../lib/npg-errors';
 
 /**
- * ---------------------------------------------------------------------------
- * Validator for PUT /plans/title
- * ---------------------------------------------------------------------------
- */
-
-/**
- * @deprecated
- */
-const validatePutPlanTitleBody_schema = yup.object().shape({
-    plan_id: yup.string().required(),
-    title: yup.string().required()
-});
-
-/**
- * @deprecated
- */
-const validatePlanDatafieldBody_schema = yup.object().shape({
-    plan_id: yup.string().required(),
-    datafield_name: yup.string().required(),
-    datafield_type: yup.string().required(),
-    datafield_value: yup.lazy((value) => {
-        switch (typeof value) {
-            case 'object':
-                return yup.object<any>().required('Required field').typeError('Required field');
-            case 'number':
-                return yup.number().required();
-            default:
-                return yup.string().required();
-        }
-    })
-});
-
-/**
  *
  */
 const validatePutPlanBody_schema = yup.object().shape({
@@ -53,8 +20,6 @@ const validatePutPlanBody_schema = yup.object().shape({
 });
 
 const BodySchemaValidatorMap = {
-    'put-plan-title': validatePutPlanTitleBody_schema,
-    'put-plan-datafield': validatePlanDatafieldBody_schema,
     'put-planform': validatePutPlanBody_schema
 };
 
