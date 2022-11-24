@@ -6,34 +6,34 @@ import { Category } from 'src/interfaces/IPlan';
 export const defaultCategories: Category[] = [
     {
         name: 'DEBT & LOANS',
-        colorHex: ''
+        colorHex: '#C65757'
     },
     {
         name: 'LIABILITIES',
-        colorHex: ''
+        colorHex: '#387BBA'
     },
     {
         name: 'SUBSCRIPTIONS',
-        colorHex: ''
+        colorHex: '#A3814E'
     },
     {
         name: 'ADVISORY & SUPPORT',
-        colorHex: ''
+        colorHex: '#028A89'
     },
     {
         name: 'INSURANCE & INVESTMENT',
-        colorHex: ''
+        colorHex: '#C657A7'
     },
     {
         name: 'LIFE & EVENTS',
-        colorHex: ''
+        colorHex: '#66AC4D'
     },
     {
         name: 'SAVING',
-        colorHex: ''
+        colorHex: '#7B57C6'
     },
     {
         name: 'UN-ASSIGNED',
-        colorHex: ''
+        colorHex: '#344054'
     }
 ];
