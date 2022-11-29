@@ -1,9 +1,9 @@
-import { Category } from 'src/interfaces/IPlan';
+import { Category, PlanItem } from 'src/interfaces/IPlan';
 
 /**
  *
  */
-export const defaultCategories: Category[] = [
+const defaultCategories: Category[] = [
     {
         name: 'DEBT & LOANS',
         colorHex: '#C65757'
@@ -37,3 +37,15 @@ export const defaultCategories: Category[] = [
         colorHex: '#344054'
     }
 ];
+
+const createDefaultItems = () => {
+    const listing = defaultCategories;
+    const object: Record<string, PlanItem[]> = {};
+
+    listing.forEach((item: Category) => {
+        object[item.name] = [];
+    });
+    return object;
+};
+
+export { defaultCategories, createDefaultItems };

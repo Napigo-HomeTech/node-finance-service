@@ -3,7 +3,8 @@ import { ObjectId } from 'mongodb';
 export enum EnumHealthStatus {
     healthy = 'HEALTHY',
     warning = 'WARNING',
-    danger = 'DANGER'
+    danger = 'DANGER',
+    none = 'NONE'
 }
 export enum EnumPlanStatus {
     in_queue = 'IN-QUEUE',
@@ -39,8 +40,9 @@ export type Category = {
 };
 
 export interface PlanItem {
-    name: string;
+    item_id: string;
     category: string;
+    name: string;
     amount: number;
 }
 

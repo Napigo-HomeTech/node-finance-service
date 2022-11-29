@@ -7,10 +7,10 @@ import {
     deletePlanById,
     findPlanAndUpdate
 } from '../repository/plan.repository';
-import { EnumPlanStatus, IDocPlan, IPlanFormUpdateRequest } from '../interfaces/IPlan';
+import { EnumHealthStatus, EnumPlanStatus, IDocPlan, IPlanFormUpdateRequest } from '../interfaces/IPlan';
 import { ObjectId } from 'mongodb';
 import moment from 'moment';
-import { defaultCategories } from '../helpers/default-categories';
+import { defaultCategories } from '../helpers/planform.helpers';
 
 /**
  *
@@ -25,6 +25,7 @@ const getPaginatedUserPlans = async (userId: string, page: number, limit: number
 
     const total_counts = doc.results.length <= 0 || doc.metadata.length <= 0 ? 0 : doc.metadata[0].total_counts;
     const result = transformPaginatedBasedHTTPResponse(doc.results, total_counts, limit, page, offset);
+
     return result;
 };
 
@@ -48,8 +49,8 @@ const createPlan = async (userId: string) => {
         deleted: 0,
         status: EnumPlanStatus.draft,
         active_on: null,
-        health_status: null,
-        categories: defaultCategories,
+        health_status: EnumHealthStatus.none,
+        categories: [...defaultCategories],
         items: []
     };
 
